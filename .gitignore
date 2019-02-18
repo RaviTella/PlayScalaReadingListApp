@@ -1,23 +1,21 @@
-# Windows thumbnail cache files
-Thumbs.db
-ehthumbs.db
-ehthumbs_vista.db
+# Created by https://www.gitignore.io/api/sbt,scala
 
-# Folder config file
-Desktop.ini
+### SBT ###
+# Simple Build Tool
+# http://www.scala-sbt.org/release/docs/Getting-Started/Directories.html#configuring-version-control
 
-# Recycle Bin used on file shares
-$RECYCLE.BIN/
+dist/*
+target/
+lib_managed/
+src_managed/
+project/boot/
+project/plugins/project/
+.history
+.cache
+.lib/
 
-# Windows Installer files
-*.cab
-*.msi
-*.msm
-*.msp
+### Scala ###
+*.class
+*.log
 
-# Windows shortcuts
-*.lnk
-
-# =========================
-# Operating System Files
-# =========================
+# End of https://www.gitignore.io/api/sbt,scala
