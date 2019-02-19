@@ -1,6 +1,7 @@
 # ![Reactive non-blocking Application with Play-Scala, Reactive Mongo-CosmosDB Mongo API](logo.png)
 
-### A Sample application built with Play framework, integrated with Reactive Scala Driver for Mongo DB and Azure CosmosDB to demonstrate an end to end non-blocking application. The code base consists of two Scala projects a REST API called PlayScalaRecommendationService and a Web App which depends on the REST API called PlayScalaReadingListWebApp.
+# What
+A Sample application built with Play framework, integrated with Reactive Scala Driver for Mongo DB and Azure CosmosDB to demonstrate an end to end non-blocking application. The code base consists of two Scala projects a REST API called PlayScalaRecommendationService and a Web App which depends on the REST API called PlayScalaReadingListWebApp.
 
 Specifically, the following capabilities are demonstrated:
 * Scala Play 2.7 - Routing, Twirl templates, forms, Dependency Injection etc
