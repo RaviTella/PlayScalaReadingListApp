@@ -28,7 +28,7 @@ class HomeController @Inject()(cc: ControllerComponents) extends AbstractControl
     Ok(Json.toJson(getRecommendations))
   }
 
-  //build recommendations 
+  //build recommendations
   def getRecommendations = {
     List(Recommendation("1", "01234", "Getting Started with kubernetes", "Jonathan Baier", "Learn Kubernetes the right way", "https://mtchouimages.blob.core.windows.net/books/Kubernetes.jpg"),
       Recommendation("2", "95201", "Learning Docker Networking", "Rajdeep Das", "Docker networking deep dive", "https://mtchouimages.blob.core.windows.net/books/DockerNetworking.jpg"),

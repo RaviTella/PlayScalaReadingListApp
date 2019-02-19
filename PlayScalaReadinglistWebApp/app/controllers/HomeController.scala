@@ -6,6 +6,7 @@ import com.fasterxml.jackson.module.scala.DefaultScalaModule
 import com.fasterxml.jackson.module.scala.experimental.ScalaObjectMapper
 import com.fasterxml.jackson.databind.ObjectMapper
 import javax.inject._
+import play.api.Configuration
 import model.{Book, BookRepository, Recommendation}
 import play.api._
 import play.api.mvc._
@@ -34,7 +35,7 @@ import play.modules.reactivemongo.{ // ReactiveMongo Play2 plugin
 import reactivemongo.play.json._, collection._
 
 @Singleton
-class HomeController @Inject()(ws: WSClient, components: ControllerComponents,
+class HomeController @Inject()(configuration: Configuration, ws: WSClient, components: ControllerComponents,
                                val reactiveMongoApi: ReactiveMongoApi
                               ) extends AbstractController(components)
   with MongoController with ReactiveMongoComponents {
@@ -46,7 +47,7 @@ class HomeController @Inject()(ws: WSClient, components: ControllerComponents,
  * with JsObject, Reads and Writes.)
  */
   def collection: Future[JSONCollection] = database.map(
-    _.collection[JSONCollection]("book"))
+    _.collection[JSONCollection](configuration.get[String]("mongoConfig.collection")))
 
   import model._
   import model.JsonFormats._
@@ -71,6 +72,7 @@ class HomeController @Inject()(ws: WSClient, components: ControllerComponents,
       Ok(views.html.editReadingList.render(books.head))
     }
   }
+
 
   def delete(id: java.util.UUID) = Action.async { implicit request: Request[AnyContent] =>
     collection.flatMap(_.findAndRemove(Json.obj("_id" -> id), Option.empty[JsObject]).map(_ => Redirect(routes.HomeController.index())))
@@ -106,7 +108,7 @@ class HomeController @Inject()(ws: WSClient, components: ControllerComponents,
   }
 
   def getRecommendations() = {
-    ws.url("http://localhost:9001/recommendations").get().map { response =>
+    ws.url(configuration.get[String]("externalRestServices.recommendationService")).get().map { response =>
       (convertToObject(response.json.toString()))
     }
   }
