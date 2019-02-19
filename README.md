@@ -23,7 +23,7 @@ Specifically, the following capabilities are demonstrated:
   - mongodb.uri
 * sbt "run 9001" - from PlayScalaRecommendationService the to start the REST API 
 * sbt run - from PlayScalaReadingListWebApp to start the Web Application
-* login at http://localhost:9000/
+* Access the WebApp at http://localhost:9000/
 
 ##### NOTE: You can also run the application against Mongo DB
 
