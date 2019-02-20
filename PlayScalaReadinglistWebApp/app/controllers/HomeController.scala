@@ -54,9 +54,11 @@ class HomeController @Inject()(configuration: Configuration, ws: WSClient, compo
 
 
   def index() = Action.async { implicit request: Request[AnyContent] =>
+    val f1 = getRecommendations()
+    val f2 = getReadersBooks("tella")
     val futureResults = for {
-      futureRecommendations <- getRecommendations()
-      futureBooks <- getReadersBooks("tella")
+      futureRecommendations <- f1
+      futureBooks <- f2
     } yield (futureRecommendations, futureBooks)
     futureResults.map(results => Ok(views.html.readingList.render(results._1.toList, results._2))
     )
