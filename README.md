@@ -15,7 +15,7 @@ Specifically, the following capabilities are demonstrated:
 ## First:
  * Java 8
  * sbt
- * Create a Cosmos DB Mongo collection
+ * Create a Cosmos DB Mongo collection. use /reader as the "Shard Key"
 
 ## Then:
 * Update the following properties in application.cong for PlayScalaReadingListWebApp 
@@ -26,5 +26,21 @@ Specifically, the following capabilities are demonstrated:
 * Access the WebApp at http://localhost:9000/
 
 ##### NOTE: You can also run the application against Mongo DB
+
+# Highlights
+In Play framework, action code must be non-blocking. So, the action must immediately return a promise of the result upon invocation. In Scala that would be an object of type Future.  The following action function demonstrates the use of for-comprehension to merge the results of two independent futures and then extract the resulting values in the view. The important point to note here is to create the futures prior to using them in the for-comprehension. This will allow for concurrent execution of the calls.
+```
+ def index() = Action.async { implicit request: Request[AnyContent] =>
+    val f1 = getRecommendations()
+    val f2 = getReadersBooks("tella")
+    val futureResults = for {
+      futureRecommendations <- f1
+      futureBooks <- f2
+    } yield (futureRecommendations, futureBooks)
+    futureResults.map(results => Ok(views.html.readingList.render(results._1.toList, results._2))
+    )
+  }
+```
+
 
 
