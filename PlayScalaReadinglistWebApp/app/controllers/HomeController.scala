@@ -7,7 +7,7 @@ import com.fasterxml.jackson.module.scala.experimental.ScalaObjectMapper
 import com.fasterxml.jackson.databind.ObjectMapper
 import javax.inject._
 import play.api.Configuration
-import model.{Book, BookRepository, Recommendation}
+import model.{Book, Recommendation}
 import play.api._
 import play.api.mvc._
 import play.api.libs.ws._
