@@ -28,7 +28,7 @@ Specifically, the following capabilities are demonstrated:
 ##### NOTE: You can also run the application against Mongo DB
 
 # Highlights
-In Play framework, action code must be non-blocking. So, the action must immediately return a promise of the result upon invocation. In Scala that would be an object of type Future.  The following action function demonstrates the use of for-comprehension to merge the results of two independent futures and then extract the resulting values in the view. The important point to note here is to create the futures prior to using them in the for-comprehension. This will allow for concurrent execution of the calls.
+In Play framework, action code must be non-blocking. So, the action must immediately return a promise of the result upon invocation. In Scala that would be an object of type Future. The following action function demonstrates the use of for-comprehension to merge the results of two independent futures and then extract the resulting values in the view. The important point to note here is to create the futures prior to using them in the for-comprehension. This will allow for concurrent execution of the calls.
 ```
  def index() = Action.async { implicit request: Request[AnyContent] =>
     val f1 = getRecommendations()
@@ -41,6 +41,27 @@ In Play framework, action code must be non-blocking. So, the action must immedia
     )
   }
 ```
+Play supports WS library, which provides a way to make asynchronous, non-blocking HTTP calls through a WSClient instance. The end result is a Future[WSResponse] where the Response contains the data returned from the server. The following function calls the PlayScalaRecommendationService REST API. 
+```
+  def getRecommendations() = {
+    ws.url(configuration.get[String]("externalRestServices.recommendationService")).get().map { response =>
+      (convertToObject(response.json.toString()))
+    }
+  }
+```
+The following function uses the ReactiveMongo plugin for Play Scala to query results from the database. Again a Future is retuned and this is also a non-blocking call.  
+```
+ def getReadersBooks(reader: String) = {
+    collection.flatMap(c => 
+      c.find(Json.obj("reader" -> "tella"), Option.empty[JsObject])
+        // perform the query and get a cursor of JsObject
+        .cursor[Book](ReadPreference.primary)
+        // Collect the results as a list
+        .collect[List](Int.MaxValue, Cursor.FailOnError[List[Book]]())
+    )
+  }
+```
+
 
 
 
